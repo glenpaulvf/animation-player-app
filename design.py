@@ -52,6 +52,7 @@ class Ui_AnimationPlayerWindow(object):
         AnimationPlayerWindow.setCentralWidget(self.animation_player)
         self.AnimationPlayerMenu = QtWidgets.QMenuBar(AnimationPlayerWindow)
         self.AnimationPlayerMenu.setGeometry(QtCore.QRect(0, 0, 600, 22))
+        self.AnimationPlayerMenu.setNativeMenuBar(False)
         self.AnimationPlayerMenu.setObjectName("AnimationPlayerMenu")
         self.menu_file = QtWidgets.QMenu(self.AnimationPlayerMenu)
         self.menu_file.setObjectName("menu_file")

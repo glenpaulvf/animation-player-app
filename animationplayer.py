@@ -16,15 +16,19 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     def __exec(self):
         self.timer = QTimer()
         self.timer.timeout.connect(self.__progress_slider)
-        
+    
         self.play_button.clicked.connect(self.__play_button_on_click)        
         self.stop_button.clicked.connect(self.__stop_button_on_click)
-    
+        
+        self.slider.sliderMoved.connect(self.__animate__viewer)
+        self.slider.sliderPressed.connect(self.__animate__viewer)
+        self.slider.sliderReleased.connect(self.__animate__viewer)
+        
     def __play_button_on_click(self):
         if self.play_button.text() == "Play":    
             self.play_button.setText("Pause")
             self.update()
-            self.timer.start(0)
+            self.timer.start(1000)
                         
         elif self.play_button.text() == "Pause":
             self.play_button.setText("Play")
@@ -37,26 +41,27 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
             self.timer.stop()
         else:
             self.slider.setValue(self.slider.value() + 1)
+            self.__animate__viewer()
 
     def __stop_button_on_click(self):
         self.play_button.setText("Play")
         self.slider.setValue(self.slider.minimum())
         self.timer.stop()
+        self.viewer.reset()
+    
+    def __animate__viewer(self):
+        self.viewer.animate(self.slider.value())
+        
     
 
 class AnimationPlayerViewer(QWidget):
     
     def __init__(self, parent = None):
         super(AnimationPlayerViewer, self).__init__(parent)
-        
-        # DEBUG
-        print self.x(), self.y()
-        
+
         # Circle properties
         self.diameter = 10 # diameter
-        # Coordinates have buffer 2px
-        self.x = 2 # x-coordinate
-        self.y = 2 # y-coordinate
+        self.reset() # Sets x, y coordinates
     
     def paintEvent(self, event):
         style = QStyleOption()
@@ -73,7 +78,15 @@ class AnimationPlayerViewer(QWidget):
         
         painter.end()
         
-        
+    def animate(self, value):
+        self.x = 2 + value
+        self.y = 2 + value
+        self.update()
+    
+    def reset(self):
+        self.x = 2 # x-coordinate, buffer 2px
+        self.y = 2 # y-coordinate, buffer 2px
+        self.update()
                 
         
 if __name__ == '__main__':

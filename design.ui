@@ -85,7 +85,7 @@
      </widget>
     </item>
     <item row="0" column="0" colspan="3">
-     <widget class="QWidget" name="viewer" native="true">
+     <widget class="AnimationPlayerViewer" name="viewer" native="true">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);
 border-width: 1px;
@@ -122,6 +122,14 @@ border-color: rgb(0, 0, 0);</string>
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AnimationPlayerViewer</class>
+   <extends>QWidget</extends>
+   <header>animationplayer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

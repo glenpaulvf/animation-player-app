@@ -42,7 +42,7 @@ class Ui_AnimationPlayerWindow(object):
         self.slider.setOrientation(QtCore.Qt.Horizontal)
         self.slider.setObjectName("slider")
         self.gridLayout.addWidget(self.slider, 1, 2, 1, 1)
-        self.viewer = QtWidgets.QWidget(self.animation_player)
+        self.viewer = AnimationPlayerViewer(self.animation_player)
         self.viewer.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-width: 1px;\n"
 "border-style: solid;\n"
@@ -73,3 +73,4 @@ class Ui_AnimationPlayerWindow(object):
         self.menu_file.setTitle(_translate("AnimationPlayerWindow", "File"))
         self.action_open.setText(_translate("AnimationPlayerWindow", "Open"))
 
+from animationplayer import AnimationPlayerViewer

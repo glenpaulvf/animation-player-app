@@ -1,6 +1,7 @@
 import sys
 from design import Ui_AnimationPlayerWindow
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
+                            QStyleOption, QStyle
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter
 
@@ -46,14 +47,23 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
 class AnimationPlayerViewer(QWidget):
     
     def __init__(self, parent = None):
-        super(AnimationPlayerViewer, self).__init__()
+        super(AnimationPlayerViewer, self).__init__(parent)
+        
+        # DEBUG
+        print self.x(), self.y()
         
         # Circle properties
         self.diameter = 10 # diameter
-        self.x = 0 # x-coordinate
-        self.y = 0 # y-coordinate
+        # Coordinates have buffer 2px
+        self.x = 2 # x-coordinate
+        self.y = 2 # y-coordinate
     
     def paintEvent(self, event):
+        style = QStyleOption()
+        style.initFrom(self)
+        style_paint = QPainter(self)
+        self.style().drawPrimitive(QStyle.PE_Widget, style, style_paint, self)
+        
         painter = QPainter()
         painter.begin(self)
         

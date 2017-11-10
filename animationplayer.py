@@ -21,7 +21,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         if self.play_button.text() == "Play":    
             self.play_button.setText("Pause")
             self.update()
-            self.timer.start(500)
+            self.timer.start(0)
                         
         elif self.play_button.text() == "Pause":
             self.play_button.setText("Play")

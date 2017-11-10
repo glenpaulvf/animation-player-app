@@ -1,7 +1,9 @@
 import sys
 from design import Ui_AnimationPlayerWindow
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtGui import QPainter
+
 
 class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     
@@ -39,6 +41,29 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.play_button.setText("Play")
         self.slider.setValue(self.slider.minimum())
         self.timer.stop()
+    
+
+class AnimationPlayerViewer(QWidget):
+    
+    def __init__(self, parent = None):
+        super(AnimationPlayerViewer, self).__init__()
+        
+        # Circle properties
+        self.diameter = 10 # diameter
+        self.x = 0 # x-coordinate
+        self.y = 0 # y-coordinate
+    
+    def paintEvent(self, event):
+        painter = QPainter()
+        painter.begin(self)
+        
+        painter.setPen(Qt.black)
+        painter.setBrush(Qt.black)
+        painter.drawEllipse(self.x, self.y, self.diameter, self.diameter)
+        
+        painter.end()
+        
+        
                 
         
 if __name__ == '__main__':

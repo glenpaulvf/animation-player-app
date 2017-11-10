@@ -15,6 +15,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.timer.timeout.connect(self.__progress_slider)
         
         self.play_button.clicked.connect(self.__play_button_on_click)        
+        self.stop_button.clicked.connect(self.__stop_button_on_click)
     
     def __play_button_on_click(self):
         if self.play_button.text() == "Play":    
@@ -29,8 +30,13 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     
     def __progress_slider(self):
         self.slider.setValue(self.slider.value() + 1)
-        
 
+    def __stop_button_on_click(self):
+        self.play_button.setText("Play")
+        self.slider.setValue(self.slider.minimum())
+        self.timer.stop()
+                
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ap = AnimationPlayer()

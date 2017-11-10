@@ -29,7 +29,11 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
             self.timer.stop()
     
     def __progress_slider(self):
-        self.slider.setValue(self.slider.value() + 1)
+        if self.slider.value() == self.slider.maximum():
+            self.play_button.setText("Play")
+            self.timer.stop()
+        else:
+            self.slider.setValue(self.slider.value() + 1)
 
     def __stop_button_on_click(self):
         self.play_button.setText("Play")

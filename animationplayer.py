@@ -1,7 +1,7 @@
 import sys
 from design import Ui_AnimationPlayerWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
-                            QStyleOption, QStyle
+                            QStyleOption, QStyle, QFileDialog
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter
 
@@ -23,6 +23,8 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.slider.sliderMoved.connect(self.__animate__viewer)
         self.slider.sliderPressed.connect(self.__animate__viewer)
         self.slider.sliderReleased.connect(self.__animate__viewer)
+        
+        self.action_open.triggered.connect(self.__browse)
         
     def __play_button_on_click(self):
         if self.play_button.text() == "Play":    
@@ -51,8 +53,11 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     
     def __animate__viewer(self):
         self.viewer.animate(self.slider.value())
-        
     
+    def __browse(self):
+        (filename, _) = QFileDialog.getOpenFileName(self, 'Open csv file',
+                        '/home', 'CSV (*.csv)')
+        
 
 class AnimationPlayerViewer(QWidget):
     

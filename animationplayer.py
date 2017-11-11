@@ -1,9 +1,11 @@
 import sys
+import csv
 from design import Ui_AnimationPlayerWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
                             QStyleOption, QStyle, QFileDialog
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter
+
 
 
 class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
@@ -30,7 +32,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         if self.play_button.text() == "Play":    
             self.play_button.setText("Pause")
             self.update()
-            self.timer.start(1000)
+            self.timer.start(0)
                         
         elif self.play_button.text() == "Pause":
             self.play_button.setText("Play")
@@ -52,12 +54,44 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.viewer.reset()
     
     def __animate__viewer(self):
-        self.viewer.animate(self.slider.value())
+        new_x = self.slider.value()
+        new_y = self.slider.value()
+        
+        with open(self.ifile, 'r') as f:
+            reader = csv.reader(f)      
+            
+            for i, row in enumerate(reader):
+                if i == self.slider.value():
+                    new_x = int(row[0])
+                    new_y = int(row[1])
+                    break
+                    
+        self.viewer.animate(new_x, new_y)
     
     def __browse(self):
-        (filename, _) = QFileDialog.getOpenFileName(self, 'Open csv file',
-                        '/home', 'CSV (*.csv)')
+        (self.ifile, _) = QFileDialog.getOpenFileName(self, 'Open csv file',
+                        '/', 'CSV (*.csv)')
         
+        self.__preprocess_data()
+                        
+    def __preprocess_data(self):
+        with open(self.ifile, 'r') as f:
+            reader = csv.reader(f)      
+        
+            max_x = max(int(column[0].replace(',', '')) for column in reader)
+            f.seek(0)
+            max_y = max(int(column[1].replace(',', '')) for column in reader)
+
+            self.slider.setMaximum(max_x)
+            self.slider.setMinimum(1)
+            self.slider.setValue(1)
+                    
+            f.seek(0)
+            for i, row in enumerate(reader):
+                if i == 1:
+                    self.viewer.set_coordinates(int(row[0]), int(row[1]))
+                    break
+            
 
 class AnimationPlayerViewer(QWidget):
     
@@ -83,14 +117,19 @@ class AnimationPlayerViewer(QWidget):
         
         painter.end()
         
-    def animate(self, value):
-        self.x = 2 + value
-        self.y = 2 + value
+    def animate(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+        self.update()
+    syr
+    def reset(self):
+        self.x = 0 # x-coordinate
+        self.y = 0 # y-coordinate
         self.update()
     
-    def reset(self):
-        self.x = 2 # x-coordinate, buffer 2px
-        self.y = 2 # y-coordinate, buffer 2px
+    def set_coordinates(self, x, y):
+        self.x = x
+        self.y = y
         self.update()
                 
         

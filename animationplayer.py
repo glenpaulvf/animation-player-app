@@ -99,6 +99,8 @@ class AnimationPlayerViewer(QWidget):
         super(AnimationPlayerViewer, self).__init__(parent)
 
         # Circle properties
+        self.init_x = 0
+        self.init_y = 0
         self.diameter = 10 # diameter
         self.reset() # Sets x, y coordinates
     
@@ -121,13 +123,19 @@ class AnimationPlayerViewer(QWidget):
         self.x = new_x
         self.y = new_y
         self.update()
-    syr
+    
     def reset(self):
-        self.x = 0 # x-coordinate
-        self.y = 0 # y-coordinate
+        if self.init_x is None or self.init_y is None:
+            self.x = 0
+            self.y = 0
+        else:
+            self.x = self.init_x
+            self.y = self.init_y
         self.update()
     
     def set_coordinates(self, x, y):
+        self.init_x = x
+        self.init_y = y
         self.x = x
         self.y = y
         self.update()

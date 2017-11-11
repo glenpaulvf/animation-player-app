@@ -54,9 +54,6 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.viewer.reset()
     
     def __animate__viewer(self):
-        new_x = self.slider.value()
-        new_y = self.slider.value()
-        
         with open(self.ifile, 'r') as f:
             reader = csv.reader(f)      
             
@@ -71,6 +68,11 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     def __browse(self):
         (self.ifile, _) = QFileDialog.getOpenFileName(self, 'Open csv file',
                         '/', 'CSV (*.csv)')
+        
+        # Enable pushbuttons and slider
+        self.play_button.setEnabled(True)
+        self.stop_button.setEnabled(True)
+        self.slider.setEnabled(True)
         
         self.__preprocess_data()
                         
@@ -125,12 +127,8 @@ class AnimationPlayerViewer(QWidget):
         self.update()
     
     def reset(self):
-        if self.init_x is None or self.init_y is None:
-            self.x = 0
-            self.y = 0
-        else:
-            self.x = self.init_x
-            self.y = self.init_y
+        self.x = self.init_x
+        self.y = self.init_y
         self.update()
     
     def set_coordinates(self, x, y):

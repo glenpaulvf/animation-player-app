@@ -91,6 +91,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
             f.seek(0)
             for i, row in enumerate(reader):
                 if i == 1:
+                    self.viewer.directive(True)
                     self.viewer.set_coordinates(int(row[0]), int(row[1]))
                     break
             
@@ -99,6 +100,8 @@ class AnimationPlayerViewer(QWidget):
     
     def __init__(self, parent = None):
         super(AnimationPlayerViewer, self).__init__(parent)
+
+        self.directive = False
 
         # Circle properties
         self.init_x = 0
@@ -112,14 +115,15 @@ class AnimationPlayerViewer(QWidget):
         style_paint = QPainter(self)
         self.style().drawPrimitive(QStyle.PE_Widget, style, style_paint, self)
         
-        painter = QPainter()
-        painter.begin(self)
-        
-        painter.setPen(Qt.black)
-        painter.setBrush(Qt.black)
-        painter.drawEllipse(self.x, self.y, self.diameter, self.diameter)
-        
-        painter.end()
+        if self.directive:
+            painter = QPainter()
+            painter.begin(self)
+            
+            painter.setPen(Qt.black)
+            painter.setBrush(Qt.black)
+            painter.drawEllipse(self.x, self.y, self.diameter, self.diameter)
+            
+            painter.end()
         
     def animate(self, new_x, new_y):
         self.x = new_x

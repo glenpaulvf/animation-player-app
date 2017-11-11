@@ -2,7 +2,7 @@ import sys
 import csv
 from design import Ui_AnimationPlayerWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
-                            QStyleOption, QStyle, QFileDialog
+                            QStyleOption, QStyle, QFileDialog, QMessageBox
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter
 
@@ -13,6 +13,13 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
     def __init__(self):
         super(AnimationPlayer, self).__init__()
         self.setupUi(self)
+        
+        # Setup error dialog
+        self.error_dialog = QMessageBox()
+        self.error_dialog.setIcon(QMessageBox.Critical)
+        self.error_dialog.setText('There was a problem loading the file.')
+        self.error_dialog.setWindowTitle("Error")
+        
         self.__exec()
     
     def __exec(self):
@@ -54,21 +61,24 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.viewer.reset()
     
     def __animate__viewer(self):
-        with open(self.ifile, 'r') as f:
-            reader = csv.reader(f)      
-            
-            for i, row in enumerate(reader):
-                if i == self.slider.value():
-                    new_x = int(row[0])
-                    new_y = int(row[1])
-                    break
-                    
-        self.viewer.animate(new_x, new_y)
+        try:
+            with open(self.ifile, 'r') as f:
+                reader = csv.reader(f)      
+                
+                for i, row in enumerate(reader):
+                    if i == self.slider.value():
+                        new_x = int(row[0])
+                        new_y = int(row[1])
+                        break
+                        
+            self.viewer.animate(new_x, new_y)
+        except:
+            self.error_dialog.show()
     
     def __browse(self):
         (self.ifile, _) = QFileDialog.getOpenFileName(self, 'Open csv file',
                         '/', 'CSV (*.csv)')
-        
+
         # Enable pushbuttons and slider
         self.play_button.setEnabled(True)
         self.stop_button.setEnabled(True)
@@ -77,24 +87,26 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.__preprocess_data()
                         
     def __preprocess_data(self):
-        with open(self.ifile, 'r') as f:
-            reader = csv.reader(f)      
-        
-            max_x = max(int(column[0].replace(',', '')) for column in reader)
-            f.seek(0)
-            max_y = max(int(column[1].replace(',', '')) for column in reader)
-
-            self.slider.setMaximum(max_x)
-            self.slider.setMinimum(1)
-            self.slider.setValue(1)
-                    
-            f.seek(0)
-            for i, row in enumerate(reader):
-                if i == 1:
-                    self.viewer.directive(True)
-                    self.viewer.set_coordinates(int(row[0]), int(row[1]))
-                    break
+        try:
+            with open(self.ifile, 'r') as f:
+                reader = csv.reader(f)      
             
+                max_x = max(int(column[0].replace(',', '')) for column in reader)
+                f.seek(0)
+                max_y = max(int(column[1].replace(',', '')) for column in reader)
+    
+                self.slider.setMaximum(max_x)
+                self.slider.setMinimum(1)
+                self.slider.setValue(1)
+                        
+                f.seek(0)
+                for i, row in enumerate(reader):
+                    if i == 1:
+                        self.viewer.directive(True)
+                        self.viewer.set_coordinates(int(row[0]), int(row[1]))
+                        break
+        except:
+            self.error_dialog.show()
 
 class AnimationPlayerViewer(QWidget):
     

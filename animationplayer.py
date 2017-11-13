@@ -190,17 +190,7 @@ class AnimationPlayerViewer(QWidget):
         style.initFrom(self)
         style_paint = QPainter(self)
         self.style().drawPrimitive(QStyle.PE_Widget, style, style_paint, self)
-        
-        painter = QPainter()
-        painter.begin(self)
-        
-        painter.setPen(Qt.black)
-        painter.setBrush(Qt.black)
-        painter.drawEllipse(self.x, self.y, self.diameter, self.diameter)
-            
-        painter.end()
-        
-        
+
         if self.directive:
             painter = QPainter()
             painter.begin(self)

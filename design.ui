@@ -15,6 +15,31 @@
   </property>
   <widget class="QWidget" name="animation_player">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="2">
+     <widget class="QSlider" name="slider">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>22</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickInterval">
+       <number>1</number>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="play_button">
       <property name="enabled">
@@ -40,6 +65,16 @@
       </property>
       <property name="text">
        <string>Play</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="3">
+     <widget class="AnimationPlayerViewer" name="viewer" native="true">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border-width: 1px;
+border-style: solid;
+border-color: rgb(0, 0, 0);</string>
       </property>
      </widget>
     </item>
@@ -71,35 +106,43 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QSlider" name="slider">
+    <item row="0" column="3">
+     <widget class="QSlider" name="playback_slider">
       <property name="enabled">
        <bool>false</bool>
       </property>
       <property name="minimumSize">
        <size>
-        <width>0</width>
-        <height>22</height>
+        <width>22</width>
+        <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
-        <height>22</height>
+        <width>22</width>
+        <height>16777215</height>
        </size>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+      <property name="maximum">
+       <number>2</number>
       </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="AnimationPlayerViewer" name="viewer" native="true">
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
-border-width: 1px;
-border-style: solid;
-border-color: rgb(0, 0, 0);</string>
+      <property name="pageStep">
+       <number>1</number>
+      </property>
+      <property name="sliderPosition">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="invertedAppearance">
+       <bool>false</bool>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksAbove</enum>
+      </property>
+      <property name="tickInterval">
+       <number>1</number>
       </property>
      </widget>
     </item>

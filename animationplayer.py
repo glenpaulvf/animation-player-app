@@ -26,6 +26,9 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.scale_factor = 1
         self.max_x = 100
         self.max_y = 100
+        self.playback_slow = 1500 / 100
+        self.playback_normal = 1000 / 100
+        self.playback_fast = 500 / 100
         
         self.__exec()
     
@@ -42,13 +45,15 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         
         self.action_open.triggered.connect(self.__browse)
         
+        self.playback_slider.valueChanged.connect(self.__change_playback)
+        
         self.resized.connect(self.__scale_data)
         
     def __play_button_on_click(self):
         if self.play_button.text() == "Play":    
             self.play_button.setText("Pause")
             self.update()
-            self.timer.start(500)
+            self.timer.start(self.playback_normal)
                         
         elif self.play_button.text() == "Pause":
             self.play_button.setText("Play")
@@ -94,6 +99,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         self.play_button.setEnabled(True)
         self.stop_button.setEnabled(True)
         self.slider.setEnabled(True)
+        self.playback_slider.setEnabled(True)
         
         self.__preprocess_data()
                         
@@ -131,6 +137,7 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
             self.play_button.setEnabled(False)
             self.stop_button.setEnabled(False)
             self.slider.setEnabled(False)
+            self.playback_slider.setEnabled(False)
             
             self.error_dialog.show()
             
@@ -154,6 +161,14 @@ class AnimationPlayer(QMainWindow, Ui_AnimationPlayerWindow):
         
     def resizeEvent(self, event):
         self.resized.emit()
+        
+    def __change_playback(self):
+        if self.playback_slider.value() == 0:
+            self.timer.start(self.playback_slow)
+        elif self.playback_slider.value() == 1:
+            self.timer.start(self.playback_slow)
+        else: # self.playback_slider.value() == 2:
+            self.timer.start(self.playback_fast)
         
 
 class AnimationPlayerViewer(QWidget):
